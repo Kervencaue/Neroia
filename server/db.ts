@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, conversations, messages, Conversation, Message } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -87,6 +87,85 @@ export async function getUserByOpenId(openId: string) {
   const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
 
   return result.length > 0 ? result[0] : undefined;
+}
+
+/**
+ * Conversation queries
+ */
+export async function createConversation(
+  userId: number,
+  title?: string
+): Promise<Conversation> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .insert(conversations)
+    .values({
+      userId,
+      title: title || `Chat ${new Date().toLocaleDateString()}`,
+    })
+    .$returningId();
+
+  return result[0] as unknown as Conversation;
+}
+
+export async function getConversationsByUserId(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db
+    .select()
+    .from(conversations)
+    .where(eq(conversations.userId, userId))
+    .orderBy((t) => desc(t.updatedAt));
+}
+
+export async function getConversationById(conversationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .select()
+    .from(conversations)
+    .where(eq(conversations.id, conversationId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+/**
+ * Message queries
+ */
+export async function addMessage(
+  conversationId: number,
+  role: "user" | "assistant",
+  content: string
+): Promise<Message> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const result = await db
+    .insert(messages)
+    .values({
+      conversationId,
+      role,
+      content,
+    })
+    .$returningId();
+
+  return result[0] as unknown as Message;
+}
+
+export async function getMessagesByConversationId(conversationId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  return await db
+    .select()
+    .from(messages)
+    .where(eq(messages.conversationId, conversationId))
+    .orderBy((t) => t.createdAt);
 }
 
 // TODO: add feature queries here as your schema grows.
