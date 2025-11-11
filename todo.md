@@ -20,5 +20,11 @@
 ## Testes e Deploy
 - [x] Testar funcionalidade da IA
 - [x] Testar interface web
-- [ ] Criar checkpoint
+- [x] Criar checkpoint
 - [ ] Publicar projeto
+
+## Busca na Internet
+- [x] Implementar módulo de busca na internet
+- [x] Integrar com routers.ts
+- [x] Testar detecção de perguntas que precisam busca
+- [ ] Deploy no Vercel

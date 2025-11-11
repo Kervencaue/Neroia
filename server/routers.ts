@@ -12,6 +12,7 @@ import { invokeLLM } from "./_core/llm";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
+import { shouldSearchWeb, getWebContext } from "./_core/webSearch";
 
 export const appRouter = router({
   system: systemRouter,
@@ -76,12 +77,20 @@ export const appRouter = router({
         // Get conversation history for context
         const history = await getMessagesByConversationId(input.conversationId);
 
+        // NOVO: Buscar na internet se necessario
+        let webContext = "";
+        if (shouldSearchWeb(input.message)) {
+          webContext = await getWebContext(input.message);
+        }
+
+        // Prepare system prompt with web context
+        const systemPrompt = `Voce e um assistente de IA inteligente e amigavel. Responda em portugues de forma clara e concisa. Ajude o usuario com suas duvidas e tarefas.${webContext ? "\n\n" + webContext : ""}`;
+
         // Prepare messages for LLM
         const messages: Array<{ role: "system" | "user" | "assistant"; content: string }> = [
           {
             role: "system",
-            content:
-              "Você é um assistente de IA inteligente e amigável. Responda em português de forma clara e concisa. Ajude o usuário com suas dúvidas e tarefas.",
+            content: systemPrompt,
           },
           ...history.map((msg: any) => ({
             role: (msg.role === "user" ? "user" : "assistant") as "user" | "assistant",
@@ -93,7 +102,7 @@ export const appRouter = router({
         const response = await invokeLLM({ messages });
         const aiMessage = typeof response.choices[0].message.content === 'string'
           ? response.choices[0].message.content
-          : "Desculpe, não consegui gerar uma resposta.";
+          : "Desculpe, nao consegui gerar uma resposta.";
 
         // Save AI response
         await addMessage(input.conversationId, "assistant", aiMessage);
