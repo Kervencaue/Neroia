@@ -2,7 +2,10 @@
   "buildCommand": "pnpm build",
   "installCommand": "pnpm install",
   "outputDirectory": "dist",
-  "env": {
-    "NODE_ENV": "production"
+  "framework": null,
+  "serverless": {
+    "default": {
+      "runtime": "nodejs20.x"
+    }
   }
 }
