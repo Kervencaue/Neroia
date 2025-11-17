@@ -1,11 +1,7 @@
 {
-  "buildCommand": "pnpm build",
-  "installCommand": "pnpm install",
+  "buildCommand": "pnpm install && pnpm build",
+  "installCommand": "pnpm install --frozen-lockfile",
   "outputDirectory": "dist",
   "framework": null,
-  "serverless": {
-    "default": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "nodeVersion": "20.x"
 }
