@@ -27,4 +27,11 @@
 - [x] Implementar módulo de busca na internet
 - [x] Integrar com routers.ts
 - [x] Testar detecção de perguntas que precisam busca
-- [ ] Deploy no Vercel
+- [x] Deploy no Vercel
+
+## Deploy e Finalização
+- [x] Renomear para Aetheria
+- [x] Adicionar logo personalizada
+- [x] Fazer push para GitHub (repositório Neroia)
+- [x] Preparar para deploy no Vercel
+- [ ] Deploy no Vercel (aguardando usuário)
