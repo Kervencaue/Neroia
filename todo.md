@@ -34,4 +34,18 @@
 - [x] Adicionar logo personalizada
 - [x] Fazer push para GitHub (repositório Neroia)
 - [x] Preparar para deploy no Vercel
-- [ ] Deploy no Vercel (aguardando usuário)
+- [x] Deploy no Vercel (aguardando usuário)
+
+## Site Público - Landing Page
+- [x] Criar landing page profissional
+- [x] Adicionar seção de features
+- [x] Criar seção de testimoniais
+- [x] Adicionar CTA (Call To Action)
+- [x] Integrar com chat da IA
+
+## Otimização e Deploy Permanente
+- [x] Otimizar para SEO
+- [x] Adicionar meta tags
+- [x] Configurar robots.txt
+- [x] Testar performance
+- [ ] Deploy permanente no Vercel
